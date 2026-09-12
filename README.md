@@ -10,6 +10,16 @@ This project provides the back-end API for the WTWR weather-based clothing appli
 - ESLint with the Airbnb base configuration
 - Nodemon for local development
 
+## Screenshots
+
+Successful item creation:
+
+![Successful item creation response](screenshots/create-item-response.png)
+
+Validation error response:
+
+![Validation error response](screenshots/validation-error-response.png)
+
 ## Getting Started
 
 Install the project dependencies:
