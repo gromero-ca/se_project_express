@@ -4,7 +4,10 @@ const { BAD_REQUEST, NOT_FOUND, sendServerError } = require("../utils/errors");
 const getItems = (_req, res) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
-    .catch((error) => sendServerError(res, error));
+    .catch((error) => {
+      console.error(error);
+      return sendServerError(res);
+    });
 };
 
 const createClothingItem = (req, res) => {
@@ -18,13 +21,15 @@ const createClothingItem = (req, res) => {
   })
     .then((item) => res.status(201).send(item))
     .catch((error) => {
+      console.error(error);
+
       if (error.name === "ValidationError") {
         return res.status(BAD_REQUEST).send({
           message: "Invalid data passed to the method for creating an item",
         });
       }
 
-      return sendServerError(res, error);
+      return sendServerError(res);
     });
 };
 
@@ -33,6 +38,8 @@ const deleteClothingItem = (req, res) => {
     .orFail()
     .then((item) => res.send(item))
     .catch((error) => {
+      console.error(error);
+
       if (error.name === "CastError") {
         return res.status(BAD_REQUEST).send({ message: "Invalid item id" });
       }
@@ -41,7 +48,7 @@ const deleteClothingItem = (req, res) => {
         return res.status(NOT_FOUND).send({ message: "Item not found" });
       }
 
-      return sendServerError(res, error);
+      return sendServerError(res);
     });
 };
 
@@ -54,21 +61,17 @@ const likeClothingItem = (req, res) => {
     .orFail()
     .then((item) => res.send(item))
     .catch((error) => {
+      console.error(error);
+
       if (error.name === "CastError") {
         return res.status(BAD_REQUEST).send({ message: "Invalid item id" });
-      }
-
-      if (error.name === "ValidationError") {
-        return res.status(BAD_REQUEST).send({
-          message: "Invalid data passed to the method for updating an item",
-        });
       }
 
       if (error.name === "DocumentNotFoundError") {
         return res.status(NOT_FOUND).send({ message: "Item not found" });
       }
 
-      return sendServerError(res, error);
+      return sendServerError(res);
     });
 };
 
@@ -81,21 +84,17 @@ const unlikeClothingItem = (req, res) => {
     .orFail()
     .then((item) => res.send(item))
     .catch((error) => {
+      console.error(error);
+
       if (error.name === "CastError") {
         return res.status(BAD_REQUEST).send({ message: "Invalid item id" });
-      }
-
-      if (error.name === "ValidationError") {
-        return res.status(BAD_REQUEST).send({
-          message: "Invalid data passed to the method for updating an item",
-        });
       }
 
       if (error.name === "DocumentNotFoundError") {
         return res.status(NOT_FOUND).send({ message: "Item not found" });
       }
 
-      return sendServerError(res, error);
+      return sendServerError(res);
     });
 };
 

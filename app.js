@@ -1,9 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
-const usersRouter = require("./routes/users");
-const itemsRouter = require("./routes/items");
-const { BAD_REQUEST, NOT_FOUND, sendServerError } = require("./utils/errors");
+const router = require("./routes");
+const { BAD_REQUEST, sendServerError } = require("./utils/errors");
 
 const { PORT = 3001 } = process.env;
 const app = express();
@@ -17,14 +16,11 @@ app.use((req, _res, next) => {
   next();
 });
 
-app.use("/users", usersRouter);
-app.use("/items", itemsRouter);
-
-app.use((req, res) => {
-  res.status(NOT_FOUND).send({ message: "Requested resource not found" });
-});
+app.use(router);
 
 app.use((error, _req, res, next) => {
+  console.error(error);
+
   if (res.headersSent) {
     return next(error);
   }
@@ -33,7 +29,7 @@ app.use((error, _req, res, next) => {
     return res.status(BAD_REQUEST).send({ message: "Invalid request data" });
   }
 
-  return sendServerError(res, error);
+  return sendServerError(res);
 });
 
 mongoose
