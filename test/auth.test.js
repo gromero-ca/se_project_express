@@ -585,6 +585,47 @@ test("login returns 401 for incorrect credentials", async () => {
   }
 });
 
+test("signin rejects missing or empty email and password with 400", async () => {
+  const originalFindUserByCredentials = User.findUserByCredentials;
+  User.findUserByCredentials = async () => {
+    const error = new Error("Incorrect email or password");
+    error.statusCode = 401;
+    throw error;
+  };
+
+  try {
+    await withServer(async (url) => {
+      const bodies = [
+        {},
+        { password: "secret" },
+        { email: "person@example.com" },
+        { email: "", password: "secret" },
+        { email: "person@example.com", password: "" },
+      ];
+      const responses = await Promise.all(
+        bodies.map((body) =>
+          fetch(`${url}/signin`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          })
+        )
+      );
+
+      await Promise.all(
+        responses.map(async (response) => {
+          assert.equal(response.status, 400);
+          assert.deepEqual(await response.json(), {
+            message: "Email and password are required",
+          });
+        })
+      );
+    });
+  } finally {
+    User.findUserByCredentials = originalFindUserByCredentials;
+  }
+});
+
 test("public routes stay public and protected item routes reject missing tokens", async () => {
   const originalUserCreate = User.create;
   const originalFindUserByCredentials = User.findUserByCredentials;
