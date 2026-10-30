@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const router = require("./routes");
 const { BAD_REQUEST, sendServerError } = require("./utils/errors");
@@ -7,20 +8,12 @@ const { BAD_REQUEST, sendServerError } = require("./utils/errors");
 const { PORT = 3001 } = process.env;
 const app = express();
 
+app.use(cors());
 app.use(express.json());
-
-app.use((req, _res, next) => {
-  req.user = {
-    _id: "5d8b8592978f8bd833ca8133",
-  };
-  next();
-});
 
 app.use(router);
 
 app.use((error, _req, res, next) => {
-  console.error(error);
-
   if (res.headersSent) {
     return next(error);
   }
@@ -29,6 +22,7 @@ app.use((error, _req, res, next) => {
     return res.status(BAD_REQUEST).send({ message: "Invalid request data" });
   }
 
+  console.error(error);
   return sendServerError(res);
 });
 
