@@ -9,6 +9,7 @@ const errorHandler = require("./middlewares/error");
 const { PORT = 3001 } = process.env;
 const app = express();
 
+app.set("trust proxy", "loopback");
 app.use(logRequest);
 app.use(cors());
 app.use(express.json());

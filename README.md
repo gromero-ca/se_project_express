@@ -95,3 +95,7 @@ npm test
 All routes except `POST /signup`, `POST /signin`, and `GET /items` require an `Authorization: Bearer <token>` header. Set `JWT_SECRET` in the environment to override the development signing key; production requires this variable. The API connects to `mongodb://localhost:27017/wtwr_db`. Validation and request errors return JSON responses with a `message` field.
 
 For production, configure `NODE_ENV=production` and `JWT_SECRET` in an untracked `.env` file on the server. Requests and errors are written to `request.log` and `error.log`; these files are ignored by Git. The temporary `/crash-test` endpoint is required for the Project 15 review and must be removed after approval.
+
+Signup and signin share a limit of 50 requests per client IP every 15 minutes. Signin also allows at most 10 failed attempts per account in that period. Account limits group email case and surrounding whitespace without changing the credentials used to sign in. Limited requests return status `429`, a JSON `message`, and a `Retry-After` header. Counters are held in memory for the current single-process deployment and reset when the process restarts.
+
+Only loopback reverse proxies are trusted. Keep Node bound to `127.0.0.1` and configure Nginx to append or overwrite `X-Forwarded-For` with the actual client address. The development Docker database is likewise bound to `127.0.0.1`.
