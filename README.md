@@ -16,8 +16,8 @@ This project provides the back-end API for the WTWR weather-based clothing appli
 
 ## Deployed Application
 
-- Frontend: [WTWR](https://35.209.135.208.sslip.io)
-- API: [api.35.209.135.208.sslip.io](https://api.35.209.135.208.sslip.io)
+- Frontend: [WTWR](https://wtwr-gabriel.host2go.net)
+- API: [api.wtwr-gabriel.host2go.net](https://api.wtwr-gabriel.host2go.net)
 
 ## Front End
 
