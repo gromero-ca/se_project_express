@@ -6,21 +6,34 @@ const test = require("node:test");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-const auth = require("../middlewares/auth");
+const authMiddleware = require("../middlewares/auth");
+const errorHandler = require("../middlewares/error");
+
+const auth = (req, res, next) =>
+  authMiddleware(req, res, (error) => {
+    if (error) return errorHandler(error, req, res, next);
+    return next();
+  });
 const User = require("../models/user");
 const ClothingItem = require("../models/clothingItem");
-const {
-  createUser,
-  getCurrentUser,
-  updateCurrentUser,
-  login,
-} = require("../controllers/users");
+
+function wrapControllers(controllers) {
+  return Object.fromEntries(
+    Object.entries(controllers).map(([name, handler]) => [
+      name,
+      (req, res) =>
+        handler(req, res, (error) => errorHandler(error, req, res, () => {})),
+    ])
+  );
+}
+const { createUser, getCurrentUser, updateCurrentUser, login } =
+  wrapControllers(require("../controllers/users"));
 const {
   createClothingItem,
   deleteClothingItem,
   likeClothingItem,
   unlikeClothingItem,
-} = require("../controllers/clothingItems");
+} = wrapControllers(require("../controllers/clothingItems"));
 const { JWT_SECRET } = require("../utils/config");
 
 test("JWT secret uses a dev fallback and is required in production", () => {

@@ -6,12 +6,22 @@ This project provides the back-end API for the WTWR weather-based clothing appli
 
 - Node.js and Express
 - MongoDB with Mongoose
-- Validator for URL validation
+- Celebrate, Joi, and Validator for request and model validation
+- Winston for request and error logging
 - bcryptjs for password hashing
 - JSON Web Tokens for authentication
 - CORS for cross-origin requests
 - ESLint with the Airbnb base configuration
 - Nodemon for local development
+
+## Deployed Application
+
+- Frontend: [WTWR](https://35.209.135.208.sslip.io)
+- API: [api.35.209.135.208.sslip.io](https://api.35.209.135.208.sslip.io)
+
+## Front End
+
+The React application is available in the [WTWR frontend repository](https://github.com/gromero-ca/se_project_react).
 
 ## Project Pitch Video
 
@@ -83,3 +93,5 @@ npm test
 - `DELETE /items/:itemId/likes` — unlike an item
 
 All routes except `POST /signup`, `POST /signin`, and `GET /items` require an `Authorization: Bearer <token>` header. Set `JWT_SECRET` in the environment to override the development signing key; production requires this variable. The API connects to `mongodb://localhost:27017/wtwr_db`. Validation and request errors return JSON responses with a `message` field.
+
+For production, configure `NODE_ENV=production` and `JWT_SECRET` in an untracked `.env` file on the server. Requests and errors are written to `request.log` and `error.log`; these files are ignored by Git. The temporary `/crash-test` endpoint is required for the Project 15 review and must be removed after approval.
