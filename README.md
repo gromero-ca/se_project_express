@@ -25,7 +25,7 @@ The React application is available in the [WTWR frontend repository](https://git
 
 ## Project Pitch Video
 
-Watch [WTWR Full-Stack Project Pitch - Gabriel Romero](https://drive.google.com/file/d/18H8va7pvNMpBpXnsNGs-KKyHv-tdqol5/view?usp=drivesdk) (3:10) for a walkthrough of the React frontend, Express API, authentication, and Google Cloud deployment, including challenges, lessons learned, and future improvements.
+Watch [WTWR Full-Stack Project Pitch - Gabriel Romero](https://drive.google.com/file/d/18H8va7pvNMpBpXnsNGs-KKyHv-tdqol5/view?usp=drivesdk) (3:10), with English narration and animated architecture diagrams covering the React frontend, Express API, authentication, and Google Cloud deployment, including challenges, lessons learned, and future improvements.
 
 ## Screenshots
 
